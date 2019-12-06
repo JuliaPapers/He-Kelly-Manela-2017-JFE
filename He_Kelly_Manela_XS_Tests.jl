@@ -46,6 +46,7 @@ DataArray = Array{Union{Any, Missing}}
 # Utilities
 ##############################################################################
 dropna(v::AbstractVector)::Vector{Float64} = filter(!ismissing, v)
+eye(n::Int) = Matrix{Float64}(I, n, n)
 
 yyyyq2date(yyyyq) = Dates.lastdayofquarter(Date(Dates.Year(div(yyyyq,10)),Dates.Month(round(mod(yyyyq,10)*3)),1))
 yyyymm2date(yyyymm) = Dates.lastdayofmonth(Date(Dates.Year(div(yyyymm,100)),Dates.Month(mod(yyyymm,100)),1))
@@ -237,7 +238,7 @@ function xsaptest(excessreturns::AbstractMatrix, factors::AbstractMatrix)
     # rsquared = 1-var(α)/var(meanexcessreturns)
 
     # mean absolute pricing errors (MAPE)
-    mape = mean(abs(α))
+    mape = mean(abs.(α))
 
     λ, tλFM, tλGMM, rsquared, mape, χstat, n, T, k
 end
