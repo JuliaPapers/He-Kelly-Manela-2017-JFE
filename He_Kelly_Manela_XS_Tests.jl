@@ -91,7 +91,7 @@ function organizedata(alldata)
     returnsstart = first(findall(names(alldata).==:rf))+1
     returns = alldata[:,returnsstart:end]
 
-    rf = alldata[:rf]
+    rf = alldata[!, :rf]
 
     assetnames = map(x->string(x),names(returns))
     nassets = length(assetnames)
@@ -102,10 +102,10 @@ function organizedata(alldata)
     # assetclasses[:excessreturns] = DataArray(nclasses)
     # assetclasses[:n] = DataArray(nclasses)
     # assetclasses[:allassetsRange] = DataArray(nclasses)
-    assetclasses[:returns] = DataArray(undef,nclasses)
-    assetclasses[:excessreturns] = DataArray(undef,nclasses)
-    assetclasses[:n] = DataArray(undef,nclasses)
-    assetclasses[:allassetsRange] = DataArray(undef,nclasses)
+    assetclasses[!, :returns] = DataArray(undef,nclasses)
+    assetclasses[!, :excessreturns] = DataArray(undef,nclasses)
+    assetclasses[!, :n] = DataArray(undef,nclasses)
+    assetclasses[!, :allassetsRange] = DataArray(undef,nclasses)
     
     allassetsCounter = 1;
     for c=1:nclasses
@@ -114,14 +114,14 @@ function organizedata(alldata)
         for a=1:nassets
             assetname = assetnames[a]
             if occursin(classname, assetname)
-                classreturns[Symbol(assetname)] = returns[Symbol(assetname)]
+                classreturns[!, Symbol(assetname)] = returns[!, Symbol(assetname)]
             end
         end
         assetclasses[c,:returns]=classreturns
         excessreturns = classreturns
         T, n = size(excessreturns)
         for i=1:n
-            excessreturns[:,i] = 100*(excessreturns[:,i] - rf)
+            excessreturns[!,i] = 100*(excessreturns[!,i] - rf)
         end
         assetclasses[c,:excessreturns]=excessreturns
         assetclasses[c,:n] = n
@@ -129,9 +129,9 @@ function organizedata(alldata)
         allassetsCounter = allassetsCounter + n
     end
 
-    factors = alldata[[:intermediary_capital_risk_factor, :mkt_rf]]
-    factors[:intermediary_capital_risk_factor]*=100
-    factors[:mkt_rf]*=100
+    factors = alldata[!, [:intermediary_capital_risk_factor, :mkt_rf]]
+    factors[!, :intermediary_capital_risk_factor]*=100
+    factors[!, :mkt_rf]*=100
 
     assetclasses, factors
 end
@@ -264,7 +264,7 @@ function xsaptests(alldata)
         # organize results in a vector and add to dataframe
         # results = reshape(([λ tλFM tλGMM][[2,3,1],:]).', 3*length(λ))
         results = reshape(([λ tλFM tλGMM][[2,3,1],:])', 3*length(λ))
-        lambdaTable[Symbol(classname)] = [results; rsquared; mape; n; T]
+        lambdaTable[!, Symbol(classname)] = [results; rsquared; mape; n; T]
     end
     lambdaTable
 end
@@ -285,8 +285,8 @@ CSV.write(qresfilename,lambdaTable)
 ##############################################################################
 # Quarterly Time-series plots of intermediary capital level and innovations
 ##############################################################################
-alldata[:date]=map(yyyyq2date,alldata[:yyyyq])
-alldata[:intermediary_capital_pct] = alldata[:intermediary_capital_ratio]*100
+alldata[!, :date]=map(yyyyq2date,alldata[!, :yyyyq])
+alldata[!, :intermediary_capital_pct] = alldata[!, :intermediary_capital_ratio]*100
 levelsplot = Gadfly.plot(
     layer(alldata, x="date", y="intermediary_capital_pct", Geom.line, Theme(default_color=colorant"darkblue")),
     layer(alldata, x="date", y="aem_leverage_ratio", Geom.line, Theme(default_color=colorant"darkred")),
