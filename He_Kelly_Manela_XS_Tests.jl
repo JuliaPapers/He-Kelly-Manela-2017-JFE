@@ -36,7 +36,7 @@ classnames = ["FF25", "US_bonds", "Sov_bonds", "Options", "CDS", "Commod", "FX",
 # Pkg.add("Gadfly")
 # Pkg.add("Cairo")
 # Pkg.update()
-using CSV, Statistics
+using CSV, Statistics, Dates
 using DataFrames, GLM, Gadfly
 
 # https://github.com/JuliaStats/DataArrays.jl
@@ -48,8 +48,9 @@ DataArray = Array{Union{Any, Missing}}
 dropna(v::AbstractVector)::Vector{Float64} = filter(!ismissing, v)
 eye(n::Int) = Matrix{Float64}(I, n, n)
 
-yyyyq2date(yyyyq) = Dates.lastdayofquarter(Date(Dates.Year(div(yyyyq,10)),Dates.Month(round(mod(yyyyq,10)*3)),1))
-yyyymm2date(yyyymm) = Dates.lastdayofmonth(Date(Dates.Year(div(yyyymm,100)),Dates.Month(mod(yyyymm,100)),1))
+yyyyq2date(yyyyq) = 
+Dates.lastdayofquarter(Date(div(yyyyq,10),round(mod(yyyyq,10)*3),1))
+yyyymm2date(yyyymm) = Dates.lastdayofmonth(Date(div(yyyymm,100),mod(yyyymm,100),1))
 
 "Means with NAs"
 namean(v::AbstractVector) = mean(dropna(v))
