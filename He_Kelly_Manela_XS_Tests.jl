@@ -55,8 +55,9 @@ namean(m::AbstractMatrix) = [namean(m[:,j]) for j=1:size(m,2)]
 
 "Calculate second moment matrices with NAs"
 function naExx(x)
-    xna = isna(x)
-    completerows = vec(~any(xna,2))
+    xna = ismissing.(x)
+    
+    completerows = vec(any(~, xna, dims=2))
     completex = x[completerows,:]
     naT = size(completex,1)
     Exx = completex'*completex/naT
@@ -66,9 +67,9 @@ naExx(x::DataFrame) = naExx(convert(DataArray,x))
 
 "Run linear regression with NAs"
 function nalm(X,y)
-    completerows = vec(~any(isna([X y]),2))
-    compX = convert(Array,X[completerows,:])
-    compy = convert(Vector,y[completerows])
+    completerows = vec(any(~, ismissing.([X y]), dims=2))
+    compX = convert(Array,  X[completerows,:])
+    compy = convert(Vector, y[completerows])
     fit(LinearModel, compX, compy)
 end
 
