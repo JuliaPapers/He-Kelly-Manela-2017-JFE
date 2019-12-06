@@ -80,7 +80,7 @@ function completecases(classname,excessreturns,factors)
 end
 
 function organizedata(alldata)
-    returnsstart = first(find(names(alldata).==:rf))+1
+    returnsstart = first(findall(names(alldata).==:rf))+1
     returns = alldata[:,returnsstart:end]
 
     rf = alldata[:rf]
