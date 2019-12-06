@@ -36,7 +36,7 @@ classnames = ["FF25", "US_bonds", "Sov_bonds", "Options", "CDS", "Commod", "FX",
 # Pkg.add("Gadfly")
 # Pkg.add("Cairo")
 # Pkg.update()
-using CSV
+using CSV, Statistics
 using DataFrames, GLM, Gadfly
 
 # https://github.com/JuliaStats/DataArrays.jl
@@ -45,7 +45,7 @@ DataArray = Array{Union{Any, Missing}}
 ##############################################################################
 # Utilities
 ##############################################################################
-dropna(v::AbstractVector) = filter(!ismissing, v)
+dropna(v::AbstractVector)::Vector{Float64} = filter(!ismissing, v)
 
 yyyyq2date(yyyyq) = Dates.lastdayofquarter(Date(Dates.Year(div(yyyyq,10)),Dates.Month(round(mod(yyyyq,10)*3)),1))
 yyyymm2date(yyyymm) = Dates.lastdayofmonth(Date(Dates.Year(div(yyyymm,100)),Dates.Month(mod(yyyymm,100)),1))
@@ -177,7 +177,7 @@ function xsaptest(excessreturns::AbstractMatrix, factors::AbstractMatrix)
     for f=1:1+k
         nonmissinglambdatf = dropna(λt[:,f])
         λ[f] = mean(nonmissinglambdatf)
-        seλFM[f] = sqrt(sum((nonmissinglambdatf - λ[f]).^2) / T)/sqrt(T)
+        seλFM[f] = sqrt(sum((nonmissinglambdatf .- λ[f]).^2) / T)/sqrt(T)
         tλFM[f] = λ[f]/seλFM[f]
     end
 
