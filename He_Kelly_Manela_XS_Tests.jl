@@ -108,7 +108,7 @@ function organizedata(alldata)
         classreturns = DataFrame()
         for a=1:nassets
             assetname = assetnames[a]
-            if contains(assetname,classname)
+            if occursin(classname, assetname)
                 classreturns[Symbol(assetname)] = returns[Symbol(assetname)]
             end
         end
