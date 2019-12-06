@@ -60,7 +60,7 @@ namean(m::AbstractMatrix) = [namean(m[:,j]) for j=1:size(m,2)]
 function naExx(x)
     xna = ismissing.(x)
     
-    completerows = vec(any(~, xna, dims=2))
+    completerows = vec(all(~, xna, dims=2))
     completex = x[completerows,:]
     naT = size(completex,1)
     Exx = completex'*completex/naT
@@ -70,7 +70,7 @@ naExx(x::DataFrame) = naExx(convert(DataArray,x))
 
 "Run linear regression with NAs"
 function nalm(X,y)
-    completerows = vec(any(~, ismissing.([X y]), dims=2))
+    completerows = vec(all(~, ismissing.([X y]), dims=2))
     compX = convert(Array{Float64},  X[completerows,:])
     compy = convert(Vector{Float64}, y[completerows])
     GLM.lm(compX, compy)
