@@ -36,7 +36,7 @@ classnames = ["FF25", "US_bonds", "Sov_bonds", "Options", "CDS", "Commod", "FX",
 # Pkg.add("Gadfly")
 # Pkg.add("Cairo")
 # Pkg.update()
-using CSV, Statistics, Dates
+using CSV, LinearAlgebra, Statistics, Dates
 using DataFrames, GLM, Gadfly
 
 # https://github.com/JuliaStats/DataArrays.jl
