@@ -11,7 +11,8 @@
 # Author: Asaf Manela
 # Date: Feb 2017
 #
-# Code is for Julia v0.5, and won't work out of the box with later versions
+# Code is for Julia v1.0.5.
+# update time: 20191206 by woclass
 ##############################################################################
 
 # data directory
@@ -48,9 +49,9 @@ DataArray = Array{Union{Any, Missing}}
 dropna(v::AbstractVector)::Vector{Float64} = filter(!ismissing, v)
 eye(n::Int) = Matrix{Float64}(I, n, n)
 
-yyyyq2date(yyyyq) = 
+yyyyq2date(yyyyq::Int) = 
 Dates.lastdayofquarter(Date(div(yyyyq,10),round(mod(yyyyq,10)*3),1))
-yyyymm2date(yyyymm) = Dates.lastdayofmonth(Date(div(yyyymm,100),mod(yyyymm,100),1))
+yyyymm2date(yyyymm::Int) = Dates.lastdayofmonth(Date(div(yyyymm,100),mod(yyyymm,100),1))
 
 "Means with NAs"
 namean(v::AbstractVector) = mean(dropna(v))
