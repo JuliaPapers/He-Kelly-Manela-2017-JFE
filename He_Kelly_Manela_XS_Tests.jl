@@ -39,6 +39,9 @@ classnames = ["FF25", "US_bonds", "Sov_bonds", "Options", "CDS", "Commod", "FX",
 using CSV
 using DataFrames, GLM, Gadfly
 
+# https://github.com/JuliaStats/DataArrays.jl
+DataArray = Array{Union{Any, Missing}}
+
 ##############################################################################
 # Utilities
 ##############################################################################
@@ -90,10 +93,15 @@ function organizedata(alldata)
 
     nclasses = length(classnames)
     assetclasses = DataFrame(classnames=classnames)
-    assetclasses[:returns] = DataArray(Any, nclasses)
-    assetclasses[:excessreturns] = DataArray(Any, nclasses)
-    assetclasses[:n] = DataArray(Any, nclasses)
-    assetclasses[:allassetsRange] = DataArray(Any, nclasses)
+    # assetclasses[:returns] = DataArray(nclasses)
+    # assetclasses[:excessreturns] = DataArray(nclasses)
+    # assetclasses[:n] = DataArray(nclasses)
+    # assetclasses[:allassetsRange] = DataArray(nclasses)
+    assetclasses[:returns] = DataArray(undef,nclasses)
+    assetclasses[:excessreturns] = DataArray(undef,nclasses)
+    assetclasses[:n] = DataArray(undef,nclasses)
+    assetclasses[:allassetsRange] = DataArray(undef,nclasses)
+    
     allassetsCounter = 1;
     for c=1:nclasses
         classname = classnames[c]
@@ -132,9 +140,13 @@ function xsaptest(excessreturns::AbstractMatrix, factors::AbstractMatrix)
     k = size(factors,2)
 
     # TS regression for betas
-    β = DataArray(Float64, n, 3)
-    ɛt = DataArray(Float64, T, n)
-    Xf = hcat(fill!(DataArray(Float64,T,1),1.0),factors)
+    # β = DataArray(Float64, n, 3)
+    # ɛt = DataArray(Float64, T, n)
+    # Xf = hcat(fill!(DataArray(Float64,T,1),1.0),factors)
+    β  = Array{Union{Float64, Missing}}(undef, n, 3)
+    ɛt = Array{Union{Float64, Missing}}(undef, T, n)
+    Xf = hcat(ones(Union{Float64, Missing}, T, 1), factors)
+    
     for i=1:n
         lmi = nalm(Xf, excessreturns[:,i])
         β[i,:] = coef(lmi)
@@ -145,16 +157,20 @@ function xsaptest(excessreturns::AbstractMatrix, factors::AbstractMatrix)
     Σ = convert(Array,Σ)
 
     # FM regressions
-    X = hcat(fill!(DataArray(Float64,n,1),1.0),β[:,2:end])
-    λt = DataArray(Float64, T, k+1)
+    # X = hcat(fill!(DataArray(Float64,n,1),1.0),β[:,2:end])
+    # λt = DataArray(Float64, T, k+1)
+    X  = hcat(ones(Union{Float64, Missing} ,n,1), β[:,2:end])
+    λt = Array{Union{Float64, Missing}}(undef, T, k+1)
+    
     for t=1:T
         λt[t,:]=coef(nalm(X,excessreturns[t,:]))
     end
 
     # Fama-MacBeth point estimates and standard errors
-    λ = DataArray(Float64,k+1,1)
+    # λ = DataArray(Float64,k+1,1)
+    λ = Array{Union{Float64, Missing}}(undef, k+1, 1)
     seλFM = zeros(1+k,1)
-    tλFM = zeros(1+k,1)
+    tλFM  = zeros(1+k,1)
     for f=1:1+k
         nonmissinglambdatf = dropna(λt[:,f])
         λ[f] = mean(nonmissinglambdatf)
