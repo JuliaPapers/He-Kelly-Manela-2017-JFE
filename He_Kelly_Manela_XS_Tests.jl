@@ -72,9 +72,9 @@ function nalm(X,y)
     fit(LinearModel, compX, compy)
 end
 
-function completecases(classname,excessreturns,factors)
+function _completecases(classname,excessreturns,factors)
     if classname!="All" && classname!="All_Ptfs"
-        nonmissing = complete_cases([excessreturns factors])
+        nonmissing = completecases([excessreturns factors])
         factors = factors[nonmissing,:]
         excessreturns = excessreturns[nonmissing,:]
     end
@@ -251,7 +251,7 @@ function xsaptests(alldata)
         excessreturns=assetclasses[c,:excessreturns]
 
         # keep only complete cases
-        rx, fs = completecases(classname,excessreturns,factors)
+        rx, fs = _completecases(classname,excessreturns,factors)
 
         # run XS test
         λ, tλFM, tλGMM, rsquared, mape, χstat, n, T, k = xsaptest(rx,fs)
