@@ -77,14 +77,14 @@ function nalm(X,y)
     GLM.lm(compX, compy)
 end
 
-function _completecases(classname,excessreturns,factors)
+function _completecases(classname::String,excessreturns::DataFrame,factors::DataFrame)
     if classname!="All" && classname!="All_Ptfs"
         nonmissing = completecases([excessreturns factors])
         factors = factors[nonmissing,:]
         excessreturns = excessreturns[nonmissing,:]
     end
 
-    convert(DataArray,excessreturns), convert(DataArray,factors)
+    convert(Matrix{Union{Float64, Missing}},excessreturns), convert(Matrix{Union{Float64, Missing}},factors)
 end
 
 function organizedata(alldata)
@@ -314,3 +314,5 @@ lambdaTable = xsaptests(alldata)
 
 # export results to file
 CSV.write(mresfilename,lambdaTable)
+
+println("finished!")
