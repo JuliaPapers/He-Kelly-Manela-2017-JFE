@@ -22,8 +22,10 @@ qfilename = joinpath(datadir,"He_Kelly_Manela_Factors_And_Test_Assets.csv")
 mfilename = joinpath(datadir,"He_Kelly_Manela_Factors_And_Test_Assets_monthly.csv")
 
 # results files
-qresfilename = joinpath(datadir,"He_Kelly_Manela_Factors_And_Test_Assets_XS_results.csv")
-mresfilename = joinpath(datadir,"He_Kelly_Manela_Factors_And_Test_Assets_XS_results_monthly.csv")
+# qresfilename = joinpath(datadir,"He_Kelly_Manela_Factors_And_Test_Assets_XS_results.csv")
+# mresfilename = joinpath(datadir,"He_Kelly_Manela_Factors_And_Test_Assets_XS_results_monthly.csv")
+qresfilename = joinpath(datadir,"He_Kelly_Manela_Factors_And_Test_Assets_XS_results_1.0test.csv")
+mresfilename = joinpath(datadir,"He_Kelly_Manela_Factors_And_Test_Assets_XS_results_monthly_1.0test.csv")
 
 # asset classes
 classnames = ["FF25", "US_bonds", "Sov_bonds", "Options", "CDS", "Commod", "FX", "All"]
@@ -34,7 +36,7 @@ classnames = ["FF25", "US_bonds", "Sov_bonds", "Options", "CDS", "Commod", "FX",
 # Pkg.add("Gadfly")
 # Pkg.add("Cairo")
 # Pkg.update()
-
+using CSV
 using DataFrames, GLM, Gadfly
 
 ##############################################################################
@@ -250,13 +252,13 @@ end
 ##############################################################################
 
 # read all data from file
-alldata = readtable(qfilename)
+alldata = CSV.read(qfilename)
 
 # run cross-sectional tests
 lambdaTable = xsaptests(alldata)
 
 # export results to file
-writetable(qresfilename,lambdaTable)
+CSV.write(qresfilename,lambdaTable)
 
 ##############################################################################
 # Quarterly Time-series plots of intermediary capital level and innovations
@@ -283,10 +285,10 @@ factorsplot = Gadfly.plot(
 ##############################################################################
 
 # read all data from file
-alldata = readtable(mfilename)
+alldata = CSV.read(mfilename)
 
 # run cross-sectional tests
 lambdaTable = xsaptests(alldata)
 
 # export results to file
-writetable(mresfilename,lambdaTable)
+CSV.write(mresfilename,lambdaTable)
