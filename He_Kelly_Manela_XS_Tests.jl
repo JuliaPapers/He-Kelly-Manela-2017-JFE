@@ -241,7 +241,8 @@ function xsaptests(alldata)
         λ, tλFM, tλGMM, rsquared, mape, χstat, n, T, k = xsaptest(rx,fs)
 
         # organize results in a vector and add to dataframe
-        results = reshape(([λ tλFM tλGMM][[2,3,1],:]).', 3*length(λ))
+        # results = reshape(([λ tλFM tλGMM][[2,3,1],:]).', 3*length(λ))
+        results = reshape(([λ tλFM tλGMM][[2,3,1],:])', 3*length(λ))
         lambdaTable[Symbol(classname)] = [results; rsquared; mape; n; T]
     end
     lambdaTable
