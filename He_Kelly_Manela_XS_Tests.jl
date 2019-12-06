@@ -68,9 +68,9 @@ naExx(x::DataFrame) = naExx(convert(DataArray,x))
 "Run linear regression with NAs"
 function nalm(X,y)
     completerows = vec(any(~, ismissing.([X y]), dims=2))
-    compX = convert(Array,  X[completerows,:])
-    compy = convert(Vector, y[completerows])
-    fit(LinearModel, compX, compy)
+    compX = convert(Array{Float64},  X[completerows,:])
+    compy = convert(Vector{Float64}, y[completerows])
+    GLM.lm(compX, compy)
 end
 
 function _completecases(classname,excessreturns,factors)
