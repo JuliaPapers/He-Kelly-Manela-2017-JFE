@@ -1,0 +1,47 @@
+cff-version: 0.9.0
+message: If you use this software, please cite it as below.
+title: He_Kelly_Manela_2017_JFE_intermediary_capital
+authors:
+- family-names: He
+  given-names: Zhiguo
+- family-names: Kelly
+  given-names: Bryan
+- family-names: Manela
+  given-names: Asaf
+keywords:
+- Economics
+- Julia
+preferred-citation:
+  type: article
+  title: 'Intermediary asset pricing: New evidence from many asset classes'
+  authors:
+  - family-names: He
+    given-names: Zhiguo
+    affiliation: University of Chicago, Booth School of Business, and NBER
+  - family-names: Kelly
+    given-names: Bryan
+    affiliation: University of Chicago, Booth School of Business, and NBER
+    email: bryan.kelly@chicagobooth.edu
+  - family-names: Manela
+    given-names: Asaf
+    affiliation: Washington University, Olin Business School
+    email: amanela@wustl.edu
+    website: https://apps.olin.wustl.edu/faculty/manela/data.html
+  keywords:
+  - Sophisticated asset classes
+  - Primary dealers
+  - Intermediary capital
+  - Leverage cycles
+  languages:
+  - eng
+  doi: 10.1016/j.jfineco.2017.08.002
+  journal: Journal of Financial Economics
+  publisher: Elsevier B.V.
+  year: 2017
+  volume: 126
+  issue: 1
+  start: 1
+  end: 35
+url: https://github.com/JuliaPapers/He-Kelly-Manela-2017-JFE
+version: 1.1.0
+date-released: 2021-10-06
